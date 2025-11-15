@@ -1,4 +1,4 @@
-# Wait, it's all SiIvaGunner?\
+# Wait, it's all SiIvaGunner?
 ## always has been
 
 title: [sonic 1 title screen jp version](https://www.youtube.com/watch?v=nAAzMEMvkhk)\
