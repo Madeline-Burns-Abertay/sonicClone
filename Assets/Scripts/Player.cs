@@ -37,8 +37,9 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	private void OnCollisionEnter(Collision collision)
+	private void OnCollisionEnter2D(Collision2D collision)
 	{
 		isGrounded = true;
+		isCurledUp = false;
 	}
 }
