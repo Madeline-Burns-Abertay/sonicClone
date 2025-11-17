@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
 		rb.AddForce(new Vector2(horizontal, 0) * speed);
 		if (jump.IsInProgress() && isGrounded)
 		{
-			Debug.Log("jumped");
+			//Debug.Log("jumped");
 			isGrounded = false;
 			isCurledUp = true;
 			rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
