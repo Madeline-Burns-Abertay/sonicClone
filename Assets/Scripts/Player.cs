@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
 		rollingHitbox.enabled = isCurledUp;
 		float horizontal = move.ReadValue<float>();
 		rb.AddForce(new Vector2(horizontal, 0) * speed);
-		if (jump.IsInProgress() && isGrounded)
+		if (jump.WasPressedThisFrame() && isGrounded)
 		{
 			//Debug.Log("jumped");
 			isGrounded = false;
