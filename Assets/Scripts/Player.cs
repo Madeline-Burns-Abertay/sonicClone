@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -28,8 +29,9 @@ public class Player : MonoBehaviour
 		rollingHitbox.enabled = isCurledUp;
 		float horizontal = move.ReadValue<float>();
 		rb.AddForce(new Vector2(horizontal, 0) * speed);
-		if (jump.WasPressedThisFrame() && isGrounded)
-		{
+		if (jump.WasPressedThisFrame() && isGrounded) // todo: look at https://gmtk.itch.io/platformer-toolkit/devlog/395523/behind-the-code
+        {
+			
 			//Debug.Log("jumped");
 			isGrounded = false;
 			isCurledUp = true;
