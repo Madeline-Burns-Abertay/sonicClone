@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +11,7 @@ public class Player : MonoBehaviour
 	InputAction move, jumpInput, crouch, look;
 	[SerializeField] float jumpForce, speed = 1.0f;
 	bool isGrounded, isCurledUp;
+	int score, rings, time, lives;
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
 	{
@@ -20,6 +22,10 @@ public class Player : MonoBehaviour
 		jumpInput = InputSystem.actions.FindAction("Jump");
 		isGrounded = true;
 		isCurledUp = false;
+		rings = 0;
+		score = 0;
+		time = 0;
+		lives = 3;
 	}
 
 	// Update is called once per frame
@@ -50,5 +56,18 @@ public class Player : MonoBehaviour
 		isCurledUp = false;
 	}
 
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		if (collision.CompareTag("Ring"))
+		{
+			rings++;
+			Destroy(collision.gameObject);
+		}
+	}
 
+	public void resetScore() {
+		score = 0;
+	}
+
+	public string getRings() { return $"{rings}"; }
 }
