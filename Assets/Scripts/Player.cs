@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
 	Rigidbody2D rb;
 	BoxCollider2D walkingHitbox;
 	CircleCollider2D rollingHitbox;
-	InputAction move, jump, crouch, look;
+	InputAction move, jumpInput, crouch, look;
 	[SerializeField] float jumpForce, speed = 1.0f;
 	bool isGrounded, isCurledUp;
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
 		walkingHitbox = GetComponent<BoxCollider2D>();
 		rollingHitbox = GetComponent<CircleCollider2D>();
 		move = InputSystem.actions.FindAction("Move");
-		jump = InputSystem.actions.FindAction("Jump");
+		jumpInput = InputSystem.actions.FindAction("Jump");
 		isGrounded = true;
 		isCurledUp = false;
 	}
@@ -25,23 +25,30 @@ public class Player : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+
 		walkingHitbox.enabled = !isCurledUp;
 		rollingHitbox.enabled = isCurledUp;
 		float horizontal = move.ReadValue<float>();
 		rb.AddForce(new Vector2(horizontal, 0) * speed);
-		if (jump.WasPressedThisFrame() && isGrounded) // todo: look at https://gmtk.itch.io/platformer-toolkit/devlog/395523/behind-the-code
+		if (jumpInput.WasPressedThisFrame() && isGrounded) // todo: look at https://gmtk.itch.io/platformer-toolkit/devlog/395523/behind-the-code
         {
-			
+			jump();
 			//Debug.Log("jumped");
-			isGrounded = false;
-			isCurledUp = true;
-			rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+			
 		}
 	}
 
+	void jump()
+	{
+        isGrounded = false;
+        isCurledUp = true;
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+    }
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
 		isGrounded = true;
 		isCurledUp = false;
 	}
+
+
 }
