@@ -16,12 +16,14 @@ public class HUDUpdater : MonoBehaviour
 	{
 		player = playerObject.GetComponent<Player>();
 		StartCoroutine(SetTextColor());
+		time = player.getTime();
+		rings = player.getRings();
 	}
 	void Update()
 	{
 		time = player.getTime();
 		rings = player.getRings();
-		if (rings == 0)
+		if (rings != 0)
 		{
 			ringTextColour = "yellow";
 		}
@@ -38,7 +40,8 @@ public class HUDUpdater : MonoBehaviour
 			{
 				ringTextColour = (ringTextColour == "yellow" ? "red" : "yellow");
 			}
-			if (player.getTime()[0] == '9')
+
+			if (time[0] == '9')
 			{
 				timerTextColour = (timerTextColour == "yellow" ? "red" : "yellow");
 			}

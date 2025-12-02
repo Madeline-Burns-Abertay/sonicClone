@@ -38,7 +38,13 @@ public class Player : MonoBehaviour
 		walkingHitbox.enabled = !isCurledUp && !isDead;
 		rollingHitbox.enabled = isCurledUp && !isDead;
 		float horizontal = move.ReadValue<float>();
-		rb.AddForce(new Vector2(horizontal, 0) * speed);
+		if (Mathf.Abs(horizontal) > 0)
+		{
+			rb.AddForce(new Vector2(horizontal, 0) * speed);
+		} else
+		{
+			rb.AddForce(new Vector2(-rb.linearVelocityX, 0) * speed);
+		}
 		if (jumpInput.WasPressedThisFrame() && isGrounded) // todo: look at https://gmtk.itch.io/platformer-toolkit/devlog/395523/behind-the-code
 		{
 			jump();
