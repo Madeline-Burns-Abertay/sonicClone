@@ -353,10 +353,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.002332815
-    y: 0.019313306
-    width: 0.9953344
-    height: 0.9613734
+    x: 0
+    y: 0
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -707,9 +707,57 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 599700844796803927, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: m_Size.x
+      value: 1.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 599700844796803927, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: m_Size.y
+      value: 1.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 599700844796803927, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2311659948842064771, guid: 0ab70addd09d28f4192965d623d44d69, type: 3}
+    - target: {fileID: 1869709969071787654, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.x
+      value: 1.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 1869709969071787654, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 1.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 1869709969071787654, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 1.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 1869709969071787654, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 1.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 5054847291075658182, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: speed
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5054847291075658182, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: spindashSpeedCap
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 5108587250507148524, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7859641738616614951, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7859641738616614951, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7859641738616614951, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7859641738616614951, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
       propertyPath: m_LocalPosition.x
