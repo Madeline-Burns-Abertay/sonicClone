@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Threading;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -10,10 +10,36 @@ public class Player : MonoBehaviour
 	BoxCollider2D walkingHitbox;
 	CircleCollider2D rollingHitbox;
 	InputAction move, jumpInput, crouch, look;
-	[SerializeField] float jumpForce, speed = 1.0f;
-	bool isGrounded, isCurledUp, isDead;
+	[SerializeField] float jumpForce, speed, spindashSpeedCap;
+	enum State
+	{
+		Idle,
+		Running,
+		Jumped,
+		Crouched,
+		Spindash,
+		Rolling,
+		Hurt,
+		Dead
+	}
+	State state;
+	bool startedJump, currentlyPressingJump;
 	uint score, rings, time, lives;
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
+
+	public void OnJump(InputAction.CallbackContext context)
+	{
+		if (context.started)
+		{
+			state = State.Jumped;
+			currentlyPressingJump = true;
+		}
+		if (context.canceled)
+		{
+			currentlyPressingJump = false;
+		}
+	}
+
 	void Start()
 	{
 		rb = GetComponent<Rigidbody2D>();
@@ -21,9 +47,8 @@ public class Player : MonoBehaviour
 		rollingHitbox = GetComponent<CircleCollider2D>();
 		move = InputSystem.actions.FindAction("Move");
 		jumpInput = InputSystem.actions.FindAction("Jump");
-		isGrounded = true;
-		isCurledUp = false;
-		isDead = false;
+		crouch = InputSystem.actions.FindAction("Crouch/Spin");
+		state = State.Idle;
 		rings = 0;
 		score = 0;
 		time = 0;
@@ -31,24 +56,60 @@ public class Player : MonoBehaviour
 		StartCoroutine(IncrementTimer());
 	}
 
+	void stateTransition(State newState, bool condition)
+	{
+		if (condition) state = newState;
+	}
+
 	// Update is called once per frame
 	void Update()
 	{
-
-		walkingHitbox.enabled = !isCurledUp && !isDead;
-		rollingHitbox.enabled = isCurledUp && !isDead;
-		float horizontal = move.ReadValue<float>();
-		if (Mathf.Abs(horizontal) > 0)
+		float input = move.ReadValue<float>();
+		switch (state)
 		{
-			rb.AddForce(new Vector2(horizontal, 0) * speed);
+		case State.Idle:
+			walkingHitbox.enabled = true;
+			rollingHitbox.enabled = false;
+			stateTransition(State.Running, !Mathf.Approximately(input, 0));
+			stateTransition(State.Crouched, crouch.WasPressedThisFrame());
+			
+			break;
+		case State.Running:
+			walkingHitbox.enabled = true;
+			rollingHitbox.enabled = false;
+			if (Mathf.Abs(input) > 0) 
+			{
+				rb.AddForce(new Vector2(input, 0) * speed);
+			}
+			else
+			{
+				rb.AddForce(new Vector2(-rb.linearVelocityX, 0) * speed);
+			}
+			stateTransition(State.Idle, Mathf.Approximately(rb.linearVelocityX, 0));
+			break;
+		case State.Crouched:
+			stateTransition(State.Spindash, jumpInput.WasPressedThisFrame());
+			stateTransition(State.Idle, crouch.WasReleasedThisFrame());
+			break;
+
+		case State.Dead:
+			StartCoroutine(Die());
+			break;
+		default:
+			Debug.Assert(false, "This should never happen. If it does, the game's fucked - contact 2501892@abertay.ac.uk immediately.");
+			break;
+		}
+		
+		if (Mathf.Abs(input) > 0)
+		{
+			
 		} else
 		{
-			rb.AddForce(new Vector2(-rb.linearVelocityX, 0) * speed);
+			
 		}
 		if (jumpInput.WasPressedThisFrame() && isGrounded) // todo: look at https://gmtk.itch.io/platformer-toolkit/devlog/395523/behind-the-code
 		{
 			jump();
-			//Debug.Log("jumped");
 			
 		}
 	}
@@ -59,11 +120,6 @@ public class Player : MonoBehaviour
 		isCurledUp = true;
 		rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
 	}
-	private void OnCollisionEnter2D(Collision2D collision)
-	{
-		isGrounded = true;
-		isCurledUp = false;
-	}
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
@@ -72,6 +128,16 @@ public class Player : MonoBehaviour
 			if (rings < 999) { rings++; }
 			if (rings % 100 == 0) { lives++; }
 			Destroy(collision.gameObject);
+		}
+		if (collision.CompareTag("Enemy"))
+		{
+			State newState = (rings > 0 ? State.Hurt : State.Dead);
+			stateTransition(newState, state != State.Rolling && state != State.Jumped);
+		}
+		if (collision.CompareTag("Hazard"))
+		{
+			State newState = (rings > 0 ? State.Hurt : State.Dead);
+			stateTransition(newState, true);
 		}
 	}
 
@@ -98,12 +164,11 @@ public class Player : MonoBehaviour
 
 	IEnumerator Die()
 	{
-		isDead = true;
 		rb.AddForce(jumpForce * Vector2.up, ForceMode2D.Impulse);
 		yield return new WaitForSeconds(2f);
-		if (lives > 0)
-		{
-			lives--;
+		lives--;
+		if (lives == 0) {
+			SceneManager.LoadScene("GameOverScreen");
 		}
 	}
 }
