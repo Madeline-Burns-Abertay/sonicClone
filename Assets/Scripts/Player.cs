@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
 	CircleCollider2D rollingHitbox;
 	InputAction move, jumpInput, crouch, look;
 	[SerializeField] float jumpForce, speed, spindashSpeedCap;
+	float spindashSpeed;
 	enum State
 	{
 		Idle,
@@ -23,7 +24,7 @@ public class Player : MonoBehaviour
 		Dead
 	}
 	State state;
-	bool startedJump, currentlyPressingJump;
+	bool currentlyPressingJump;
 	uint score, rings, time, lives;
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -77,13 +78,17 @@ public class Player : MonoBehaviour
 		case State.Running:
 			walkingHitbox.enabled = true;
 			rollingHitbox.enabled = false;
+			if (!Mathf.Approximately(input, 0))
+			{
+				transform.localScale = new Vector3(Mathf.Sign(input), 1);
+			}
 			if (Mathf.Abs(input) > 0) 
 			{
 				rb.AddForce(new Vector2(input, 0) * speed);
 			}
 			else
 			{
-				rb.AddForce(new Vector2(-rb.linearVelocityX, 0) * speed);
+				rb.AddForce(new Vector2(-rb.linearVelocityX, 0));
 			}
 			stateTransition(State.Idle, Mathf.Approximately(rb.linearVelocityX, 0));
 			break;
@@ -91,7 +96,19 @@ public class Player : MonoBehaviour
 			stateTransition(State.Spindash, jumpInput.WasPressedThisFrame());
 			stateTransition(State.Idle, crouch.WasReleasedThisFrame());
 			break;
-
+		case State.Spindash:
+			if (jumpInput.WasPressedThisFrame() && spindashSpeed < spindashSpeedCap)
+			{
+				spindashSpeed += 5;
+			}
+			if (crouch.WasReleasedThisFrame())
+			{
+				rb.AddForce(new Vector2(transform.localScale.x, 0) * spindashSpeed, ForceMode2D.Impulse);
+				stateTransition(State.Rolling, true);
+			}
+			break;
+		case State.Jumped:
+			break;
 		case State.Dead:
 			StartCoroutine(Die());
 			break;
@@ -107,19 +124,19 @@ public class Player : MonoBehaviour
 		{
 			
 		}
-		if (jumpInput.WasPressedThisFrame() && isGrounded) // todo: look at https://gmtk.itch.io/platformer-toolkit/devlog/395523/behind-the-code
+/*		if (jumpInput.WasPressedThisFrame() && isGrounded) // todo: look at https://gmtk.itch.io/platformer-toolkit/devlog/395523/behind-the-code
 		{
 			jump();
 			
-		}
+		}*/
 	}
 
-	void jump()
+	/*void jump()
 	{
 		isGrounded = false;
 		isCurledUp = true;
 		rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-	}
+	}*/
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
