@@ -17,7 +17,7 @@ public class TitleScreen : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (start.IsInProgress())
+        if (start.WasPressedThisFrame())
         {
             SceneManager.LoadScene("HillAct1");
         }
