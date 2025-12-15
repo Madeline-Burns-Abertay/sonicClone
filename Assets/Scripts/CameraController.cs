@@ -3,7 +3,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public Transform playerTransform;
-    public PolygonCollider2D mapBounds;
+    public PolygonCollider2D camBounds;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

@@ -7,7 +7,7 @@ public class GameOver : MonoBehaviour
 {
 	InputAction navigate, submit;
 	Vector2 previousInput;
-	bool shouldRestart = true;
+	bool shouldContinue = true;
 	[SerializeField] TMP_Text optionText;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -24,11 +24,11 @@ public class GameOver : MonoBehaviour
 		Debug.Log(input);
 		bool changeOptions = input.y != 0 && input != previousInput;
 		previousInput = input;
-		shouldRestart ^= changeOptions;
-		optionText.text = $"Restart?\n{(shouldRestart ? ">Yes \nNo" : "Yes\n>No ")}"; // extra spaces to keep it centered
+		shouldContinue ^= changeOptions;
+		optionText.text = $"Continue?\n{(shouldContinue ? ">Yes \nNo" : "Yes\n>No ")}"; // extra spaces to keep it centered
 		if (submit.WasPressedThisFrame())
 		{
-			string nextScene = $"{(shouldRestart ? "HillAct1" : "TitleScreen")}";
+			string nextScene = $"{(shouldContinue ? "HillAct1" : "TitleScreen")}";
 			SceneManager.LoadScene(nextScene);
 		}
 	}
