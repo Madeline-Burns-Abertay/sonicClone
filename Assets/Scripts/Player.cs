@@ -123,8 +123,9 @@ public class Player : MonoBehaviour
 				}
 				break;
 			case State.Jumped:
-
-				break;
+                stateTransition(State.Rolling, true); 
+                rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse); // TEMPORARY
+                break;
 			case State.Rolling:
 				rollingHitbox.enabled = true;
 				walkingHitbox.enabled = false;
@@ -159,14 +160,15 @@ public class Player : MonoBehaviour
 		}*/
 	}
 
-	/*void jump()
-	{
-		isGrounded = false;
-		isCurledUp = true;
-		rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-	}*/
+    private void FixedUpdate()
+    {
+        if (rb.linearVelocityY > 0)
+		{
 
-	private void OnTriggerEnter2D(Collider2D collision)
+		}
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
 	{
 		if (collision.CompareTag("Ring"))
 		{
