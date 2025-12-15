@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Ring
+  - Camera Bounds
   layers:
   - Default
   - TransparentFX

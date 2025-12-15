@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
 	BoxCollider2D walkingHitbox;
 	CircleCollider2D rollingHitbox;
 	InputAction move, jumpInput, crouch, look;
-	[SerializeField] float jumpForce, speed, spindashSpeedCap;
+	[SerializeField] float jumpForce, speed, spindashSpeedIncrement, spindashSpeedCap;
 	public Camera cam;
 	float spindashSpeed;
 	enum State
@@ -113,7 +113,8 @@ public class Player : MonoBehaviour
 			case State.Spindash:
 				if (jumpInput.WasPressedThisFrame() && spindashSpeed < spindashSpeedCap)
 				{
-					spindashSpeed += 10;
+					spindashSpeed += spindashSpeedIncrement;
+					Debug.Log($"spindash speed: {spindashSpeed}/{spindashSpeedCap}");
 				}
 				if (crouch.WasReleasedThisFrame())
 				{
