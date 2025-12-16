@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
+	InputSystem_Actions controls;
 	Rigidbody2D rb;
 	BoxCollider2D walkingHitbox;
 	CircleCollider2D rollingHitbox;
@@ -45,6 +46,7 @@ public class Player : MonoBehaviour
 
 	void Start()
 	{
+		controls = new InputSystem_Actions();
 		rb = GetComponent<Rigidbody2D>();
 		walkingHitbox = GetComponent<BoxCollider2D>();
 		rollingHitbox = GetComponent<CircleCollider2D>();
@@ -107,7 +109,11 @@ public class Player : MonoBehaviour
 				stateTransition(State.Rolling, crouch.WasPressedThisFrame());
 				break;
 			case State.Crouched:
-				stateTransition(State.Spindash, jumpInput.WasPressedThisFrame());
+				if (jumpInput.WasPressedThisFrame())
+				{
+                    spindashSpeed += spindashSpeedIncrement;
+                    stateTransition(State.Spindash, jumpInput.WasPressedThisFrame());
+                }
 				stateTransition(State.Idle, crouch.WasReleasedThisFrame());
 				break;
 			case State.Spindash:
