@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ring
   - Camera Bounds
+  - Hazard
+  - Enemy
   layers:
   - Default
   - TransparentFX

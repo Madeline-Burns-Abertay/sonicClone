@@ -1046,19 +1046,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1869709969071787654, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
       propertyPath: m_SpriteTilingProperty.newSize.x
-      value: 1.28
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1869709969071787654, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
       propertyPath: m_SpriteTilingProperty.newSize.y
-      value: 1.28
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1869709969071787654, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 1.28
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1869709969071787654, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.y
-      value: 1.28
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3743408506383030968, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: m_NotificationBehavior
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3743408506383030968, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3743408506383030968, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: set_name
+      objectReference: {fileID: 0}
+    - target: {fileID: 3743408506383030968, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3743408506383030968, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: OnJump
+      objectReference: {fileID: 0}
+    - target: {fileID: 3743408506383030968, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5054847291075658182, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
       propertyPath: cam
@@ -1078,6 +1102,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5108587250507148524, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
       propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5108587250507148524, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 7859641738616614951, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
@@ -1132,7 +1160,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3743408506383030968, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

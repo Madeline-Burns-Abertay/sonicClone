@@ -7,7 +7,7 @@ public class HUDUpdater : MonoBehaviour
 {
 	public TMP_Text scoreDisplay, timer, ringCount, lifeCount;
 	public GameObject playerObject;
-	uint rings;
+	int rings;
 	string time;
 	string ringTextColour = "yellow";
 	string timerTextColour = "yellow";
@@ -17,8 +17,8 @@ public class HUDUpdater : MonoBehaviour
 		player = playerObject.GetComponent<Player>();
 		time = player.getTime();
 		rings = player.getRings();
-        StartCoroutine(SetTextColor());
-    }
+		StartCoroutine(SetTextColor());
+	}
 	void Update()
 	{
 		time = player.getTime();

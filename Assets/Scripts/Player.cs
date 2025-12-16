@@ -6,11 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
-	InputSystem_Actions controls;
 	Rigidbody2D rb;
 	BoxCollider2D walkingHitbox;
 	CircleCollider2D rollingHitbox;
-	InputAction move, jumpInput, crouch, look;
+	[SerializeField] InputAction move, jumpInput, crouch, look;
 	[SerializeField] float jumpForce, speed, spindashSpeedIncrement, spindashSpeedCap;
 	public Camera cam;
 	float spindashSpeed;
@@ -28,15 +27,31 @@ public class Player : MonoBehaviour
 	}
 	State state;
 	bool currentlyPressingJump;
-	uint score, rings, time, lives;
+	int score, rings, time, lives;
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 
 	public void OnJump(InputAction.CallbackContext context)
 	{
 		if (context.started)
 		{
-			state = State.Jumped;
-			currentlyPressingJump = true;
+			switch (state)
+			{
+				case State.Crouched:
+					spindashSpeed = spindashSpeedIncrement;
+					stateTransition(State.Spindash, true);
+					break;
+				case State.Spindash:
+					if (spindashSpeed < spindashSpeedCap)
+					{
+						spindashSpeed += spindashSpeedIncrement;
+						Debug.Log($"spindash speed: {spindashSpeed}/{spindashSpeedCap}");
+					}
+					break;
+				default:
+					stateTransition(State.Jumped, true);
+					currentlyPressingJump = true;
+					break;
+			}
 		}
 		if (context.canceled)
 		{
@@ -46,14 +61,15 @@ public class Player : MonoBehaviour
 
 	void Start()
 	{
-		controls = new InputSystem_Actions();
 		rb = GetComponent<Rigidbody2D>();
 		walkingHitbox = GetComponent<BoxCollider2D>();
 		rollingHitbox = GetComponent<CircleCollider2D>();
 		move = InputSystem.actions.FindAction("Move");
 		jumpInput = InputSystem.actions.FindAction("Jump");
+		jumpInput.Enable();
+		jumpInput.started += OnJump;
+		jumpInput.canceled += OnJump;
 		crouch = InputSystem.actions.FindAction("Crouch or Spin");
-		//Debug.Assert(crouch != null, "god fucking dammit");
 		state = State.Idle;
 		rings = 0;
 		score = 0;
@@ -76,10 +92,10 @@ public class Player : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		stateTransition(State.Dead, cam.WorldToViewportPoint(transform.position).y < 0); // kill the player if it falls off the stage.
-																						 // impossible in the only level that currently
-																						 // exists, but it doesn't hurt to have it ready
-																						 // in case i ever decide to expand on this
+		bool fellOffTheScreen = cam.WorldToViewportPoint(transform.position).y < 0 && state != State.Dead;
+
+		stateTransition(State.Dead, fellOffTheScreen && state != State.FinishedLevel); // kill the player if it falls off the stage. impossible in the only level that currently
+																					   // exists, but it doesn't hurt to have it ready in case i ever decide to expand on this
 		float input = move.ReadValue<float>();
 		switch (state)
 		{
@@ -109,19 +125,9 @@ public class Player : MonoBehaviour
 				stateTransition(State.Rolling, crouch.WasPressedThisFrame());
 				break;
 			case State.Crouched:
-				if (jumpInput.WasPressedThisFrame())
-				{
-                    spindashSpeed += spindashSpeedIncrement;
-                    stateTransition(State.Spindash, jumpInput.WasPressedThisFrame());
-                }
 				stateTransition(State.Idle, crouch.WasReleasedThisFrame());
 				break;
 			case State.Spindash:
-				if (jumpInput.WasPressedThisFrame() && spindashSpeed < spindashSpeedCap)
-				{
-					spindashSpeed += spindashSpeedIncrement;
-					Debug.Log($"spindash speed: {spindashSpeed}/{spindashSpeedCap}");
-				}
 				if (crouch.WasReleasedThisFrame())
 				{
 					rb.AddForce(new Vector2(transform.localScale.x, 0) * spindashSpeed, ForceMode2D.Impulse);
@@ -129,9 +135,9 @@ public class Player : MonoBehaviour
 				}
 				break;
 			case State.Jumped:
-                stateTransition(State.Rolling, true); 
-                rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse); // TEMPORARY
-                break;
+				stateTransition(State.Rolling, true); 
+				rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse); // TEMPORARY
+				break;
 			case State.Rolling:
 				rollingHitbox.enabled = true;
 				walkingHitbox.enabled = false;
@@ -166,15 +172,23 @@ public class Player : MonoBehaviour
 		}*/
 	}
 
-    private void FixedUpdate()
-    {
-        if (rb.linearVelocityY > 0)
+	private void FixedUpdate()
+	{
+		if (rb.linearVelocityY > 0)
 		{
 
 		}
-    }
+	}
 
-    private void OnTriggerEnter2D(Collider2D collision)
+	private void OnCollisionEnter2D(Collision2D collision)
+	{
+		if (collision.collider.CompareTag("Ground"))
+		{
+			state = (Mathf.Approximately(rb.linearVelocityX, 0) ? State.Idle : State.Running);
+		}
+	}
+
+	private void OnTriggerEnter2D(Collider2D collision)
 	{
 		if (collision.CompareTag("Ring"))
 		{
@@ -192,13 +206,25 @@ public class Player : MonoBehaviour
 			State newState = (rings > 0 ? State.Hurt : State.Dead);
 			stateTransition(newState, true);
 		}
+		if (collision.CompareTag("End Sign"))
+		{
+            stateTransition(State.FinishedLevel, collision.CompareTag("End Sign"));
+			collision.GetComponent<SpriteRenderer>().color = new Color(0.35f, 0.64f, 0.93f);
+        }
+		
 	}
 
 	public void resetScore() {
 		score = 0;
 	}
 
-	public uint getRings() { return rings; }
+	public void addScore(int points)
+	{
+		score = Mathf.Min(score + (points * 10), 9999990);
+	}
+
+	public int getRings() { return rings; }
+	public int getLives() { return lives; }
 	public string getScore() { return $"{score.ToString().PadLeft(7)}"; }
 	public string getTime() {
 		int mins = Mathf.FloorToInt(time / 60);
