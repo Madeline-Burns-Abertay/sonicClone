@@ -131,7 +131,7 @@ public class Player : MonoBehaviour
 				walkingHitbox.enabled = false;
 				bool pressingBackwards = Mathf.Sign(input) != Mathf.Sign(rb.linearVelocityX) && input != 0;
 
-				rb.AddForceX((pressingBackwards ? (input * speed) : 0));
+				rb.AddForceX((pressingBackwards ? (input * Mathf.Abs(rb.linearVelocityX)) : 0));
 				if (Mathf.Approximately(rb.linearVelocity.magnitude, 0))
 				{
 					stateTransition(State.Crouched, crouch.inProgress);

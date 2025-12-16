@@ -15,10 +15,10 @@ public class HUDUpdater : MonoBehaviour
 	private void Start()
 	{
 		player = playerObject.GetComponent<Player>();
-		StartCoroutine(SetTextColor());
 		time = player.getTime();
 		rings = player.getRings();
-	}
+        StartCoroutine(SetTextColor());
+    }
 	void Update()
 	{
 		time = player.getTime();
