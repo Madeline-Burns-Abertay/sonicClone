@@ -8,11 +8,13 @@ TagManager:
   - Camera Bounds
   - Hazard
   - Enemy
+  - Ground
+  - End Sign
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Terrain
   - Water
   - UI
   - 

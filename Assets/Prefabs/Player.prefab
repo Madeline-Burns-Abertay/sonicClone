@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5054847291075658182}
   - component: {fileID: 571824407799339727}
   - component: {fileID: 1869709969071787654}
+  - component: {fileID: 6110521729194554763}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -167,55 +168,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a92ba7b565d608740a0c75d42a5fb16c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  move:
-    m_Name: Move
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 0b14b9c2-c3a8-4607-8c38-fff47c4000c5
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  jumpInput:
-    m_Name: Jump Input
-    m_Type: 1
-    m_ExpectedControlType: Button
-    m_Id: da797758-5cf3-41a8-b0f4-1b5fcef46729
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: f64a0d94-df66-4fa4-ba94-2640741a0ee5
-      m_Path: <Keyboard>/z
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Jump Input
-      m_Flags: 0
-    m_Flags: 0
-  crouch:
-    m_Name: Crouch
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: fdc49abd-d959-43d3-a6ba-fa6a32c52a53
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  look:
-    m_Name: Look
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: ee1b3e41-0ecd-4006-9c88-3cb2aad91ab9
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
   jumpForce: 50
-  speed: 15
-  spindashSpeedIncrement: 0
-  spindashSpeedCap: 0
+  speed: 8
+  spindashSpeedIncrement: 20
+  spindashSpeedCap: 100
+  hurtKnockback: 0
+  jumpHeight: 10
+  timeToJumpApex: 0.5
+  upwardMovementMultiplier: 1
+  downwardMovementMultiplier: 6.17
+  jumpCutOff: 1
+  fallSpeedLimit: 0
+  normal: {fileID: 0}
+  crouchSprite: {fileID: 0}
+  spindash: {fileID: 0}
+  ouch: {fileID: 0}
+  dead: {fileID: 0}
   cam: {fileID: 0}
+  RingPrefab: {fileID: 8215159359977936061, guid: ac0a75e896ab0ef4c8a19afc53e09411, type: 3}
+  sfxPlayer: {fileID: 0}
+  sfx:
+  - {fileID: 8300000, guid: f9989dc85fc3b034c8a9c836e56d26a0, type: 3}
+  - {fileID: 8300000, guid: e4d0568c3b2fc6143916fc94f4826639, type: 3}
+  - {fileID: 8300000, guid: 08b20d3f214265b47a8b719469dfc249, type: 3}
+  - {fileID: 8300000, guid: 1925b8a2b4119f24b82bdb056eeb2604, type: 3}
+  - {fileID: 8300000, guid: c95483473d1da9b4aab2ed7a550a4c13, type: 3}
+  - {fileID: 8300000, guid: 4ac68accbd96b9d4caae62fb6dc380a8, type: 3}
+  - {fileID: 8300000, guid: fa944a7587eddf7418b7089358aec018, type: 3}
+  - {fileID: 8300000, guid: 6d30063e4e7c4394fa9cba834480d423, type: 3}
+  startingLives: 3
+  timeLimitMins: 10
 --- !u!95 &571824407799339727
 Animator:
   serializedVersion: 7
@@ -284,3 +266,20 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &6110521729194554763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5108587250507148524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e80d63b8a0be1af47b4f406e589daeab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundLength: 0.95
+  colliderOffset: {x: 0, y: 0, z: 0}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0

@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class HUDUpdater : MonoBehaviour
 {
-	public TMP_Text scoreDisplay, timer, ringCount, lifeCount;
+	public TMP_Text scoreDisplay, timer, ringCount, lifeCount, FPSCount;
 	public GameObject playerObject;
-	int rings;
+	int rings, lives;
 	string time;
 	string ringTextColour = "yellow";
 	string timerTextColour = "yellow";
@@ -17,9 +17,10 @@ public class HUDUpdater : MonoBehaviour
 		player = playerObject.GetComponent<Player>();
 		time = player.getTime();
 		rings = player.getRings();
+		lives = player.getLives();
 		StartCoroutine(SetTextColor());
 	}
-	void Update()
+	void LateUpdate()
 	{
 		time = player.getTime();
 		rings = player.getRings();
@@ -30,6 +31,8 @@ public class HUDUpdater : MonoBehaviour
 		scoreDisplay.text = $"<color=yellow>Score</color>{player.getScore()}";
 		timer.text = $"<color={timerTextColour}>Time</color> {player.getTime()}";
 		ringCount.text = $"<color={ringTextColour}>Ring</color>  {player.getRings(), 3}";
+		lifeCount.text = $"<sprite name=Circle> x{lives,2}";
+		FPSCount.text = $"{(int)1 / Time.unscaledDeltaTime} FPS";
 
 	}
 	IEnumerator SetTextColor()
