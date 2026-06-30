@@ -5,37 +5,46 @@ using UnityEngine;
 
 public class HUDUpdater : MonoBehaviour
 {
-	public TMP_Text scoreDisplay, timer, ringCount, lifeCount, FPSCount;
-	public GameObject playerObject;
-	int rings, lives;
-	string time;
-	string ringTextColour = "yellow";
-	string timerTextColour = "yellow";
-	Player player;
+	[SerializeField] private TMP_Text scoreDisplay, timer, ringCount, lifeCount, debugOutput;
+	[SerializeField] private bool debug;
+	[SerializeField] private GameObject player;
+	private int rings, lives;
+	private string time;
+	private string ringTextColour = "yellow";
+	private string timerTextColour = "yellow";
+	private PlayerController playerController;
+	private PlayerScore score;
+	private uint frameCount;
+	private float avgFPS;
 	private void Start()
 	{
-		player = playerObject.GetComponent<Player>();
-		time = player.getTime();
-		rings = player.getRings();
-		lives = player.getLives();
+		playerController = player.GetComponent<PlayerController>();
+		score = player.GetComponent<PlayerScore>();
+		time = score.getTime();
+		rings = score.getRings();
+		lives = playerController.getLives();
 		StartCoroutine(SetTextColor());
+		if (debug) StartCoroutine(GetAverageFramerate(1f));
 	}
-	void LateUpdate()
+	private void LateUpdate()
 	{
-		time = player.getTime();
-		rings = player.getRings();
+		time = score.getTime();
+		rings = score.getRings();
 		if (rings != 0)
 		{
 			ringTextColour = "yellow";
 		}
-		scoreDisplay.text = $"<color=yellow>Score</color>{player.getScore()}";
-		timer.text = $"<color={timerTextColour}>Time</color> {player.getTime()}";
-		ringCount.text = $"<color={ringTextColour}>Ring</color>  {player.getRings(), 3}";
+		scoreDisplay.text = $"<color=yellow>Score</color>{score.getScore()}";
+		timer.text = $"<color={timerTextColour}>Time</color> {score.getTime()}";
+		ringCount.text = $"<color={ringTextColour}>Ring</color>  {score.getRings(), 3}";
 		lifeCount.text = $"<sprite name=Circle> x{lives,2}";
-		FPSCount.text = $"{(int)1 / Time.unscaledDeltaTime} FPS";
+		if (debug) debugOutput.text = 
+				$"<color=yellow>X:</color>{player.transform.position.x}\n" +
+				$"<color=yellow>Y:</color>{player.transform.position.y}\n" +
+				$"{(int) avgFPS} FPS";
 
 	}
-	IEnumerator SetTextColor()
+	private IEnumerator SetTextColor()
 	{
 		while (true)
 		{
@@ -53,6 +62,23 @@ public class HUDUpdater : MonoBehaviour
 				timerTextColour = "yellow";
 			}
 			yield return new WaitForSeconds(0.5f);
+		}
+	}
+
+	private IEnumerator GetAverageFramerate(float duration)
+	{
+		float timer = 0f;
+		frameCount = 0;
+		while (debug)
+		{
+			while (timer < duration)
+			{
+				yield return new WaitForEndOfFrame();
+				timer += Time.unscaledDeltaTime;
+				frameCount++;
+			}
+			avgFPS = 1 / frameCount;
+			timer = 0f; // dumbass
 		}
 	}
 }

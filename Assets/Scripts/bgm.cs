@@ -5,8 +5,8 @@ using System.Collections;
 
 public class bgm : MonoBehaviour
 {
-	[SerializeField] AudioSource intro, loop;
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
+	[SerializeField] AudioSource intro, loop; // most straightforward way i could think of. requires splitting the track into two files but meh
+	
 	void Start()
 	{
 		intro.Play();

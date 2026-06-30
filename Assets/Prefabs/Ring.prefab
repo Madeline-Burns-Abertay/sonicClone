@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4640836974110414565}
   - component: {fileID: 7574807513302689919}
   - component: {fileID: 2586184794838987876}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ring
   m_TagString: Ring
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -165,3 +165,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ebef5e2c0471e24ab0f23f9fc978899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ringCollisionDelay: 0.2
