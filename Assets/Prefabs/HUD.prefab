@@ -803,5 +803,6 @@ MonoBehaviour:
   timer: {fileID: 2714178877789252939}
   ringCount: {fileID: 4124898716280430691}
   lifeCount: {fileID: 2279272111493070129}
-  FPSCount: {fileID: 2670465191092475866}
-  playerObject: {fileID: 0}
+  debugOutput: {fileID: 2670465191092475866}
+  debug: 1
+  player: {fileID: 0}
