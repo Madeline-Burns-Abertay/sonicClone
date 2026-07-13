@@ -14,7 +14,6 @@ public class HUDUpdater : MonoBehaviour
 	private string timerTextColour = "yellow";
 	private PlayerController playerController;
 	private PlayerScore score;
-	private uint frameCount;
 	private float avgFPS;
 	private void Start()
 	{
@@ -24,7 +23,7 @@ public class HUDUpdater : MonoBehaviour
 		rings = score.getRings();
 		lives = playerController.getLives();
 		StartCoroutine(SetTextColor());
-		if (debug) StartCoroutine(GetAverageFramerate(1f));
+		StartCoroutine(GetAverageFramerate(1f));
 	}
 	private void LateUpdate()
 	{
@@ -41,7 +40,7 @@ public class HUDUpdater : MonoBehaviour
 		if (debug) debugOutput.text = 
 				$"<color=yellow>X:</color>{player.transform.position.x}\n" +
 				$"<color=yellow>Y:</color>{player.transform.position.y}\n" +
-				$"{(int) avgFPS} FPS";
+				$"{avgFPS} FPS";
 
 	}
 	private IEnumerator SetTextColor()
@@ -68,7 +67,7 @@ public class HUDUpdater : MonoBehaviour
 	private IEnumerator GetAverageFramerate(float duration)
 	{
 		float timer = 0f;
-		frameCount = 0;
+		uint frameCount = 0;
 		while (debug)
 		{
 			while (timer < duration)
@@ -77,8 +76,9 @@ public class HUDUpdater : MonoBehaviour
 				timer += Time.unscaledDeltaTime;
 				frameCount++;
 			}
-			avgFPS = 1 / frameCount;
+			avgFPS = frameCount / duration; // dumbass 2 electric boogaloo
 			timer = 0f; // dumbass
+			frameCount = 0; // dumbass 3: the ass just got dumber
 		}
 	}
 }

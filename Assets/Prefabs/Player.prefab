@@ -11,13 +11,13 @@ GameObject:
   - component: {fileID: 7859641738616614951}
   - component: {fileID: 599700844796803927}
   - component: {fileID: 2391304309191089704}
-  - component: {fileID: 571824407799339727}
-  - component: {fileID: 1869709969071787654}
   - component: {fileID: 2756205709433946794}
   - component: {fileID: 6709754504063300752}
+  - component: {fileID: 1211462263735378499}
+  - component: {fileID: 6740600185769602500}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32,8 +32,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -5.5, y: -3.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1, y: 1, z: 0}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4936217207963041638}
   m_Father: {fileID: 0}
@@ -82,8 +82,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.3532396, g: 0.6349261, b: 0.9245283, a: 1}
+  m_Sprite: {fileID: -2413806693520163455, guid: 922a736d0c3e6574e98c2ce6b3efa63b, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -120,30 +120,152 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!95 &571824407799339727
-Animator:
-  serializedVersion: 7
+--- !u!114 &2756205709433946794
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5108587250507148524}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!61 &1869709969071787654
-BoxCollider2D:
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5af431914368434bafa0259b8a33ca2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6709754504063300752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5108587250507148524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae6bbc1119054c74daa49f79ea833bee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 256
+  jumpForce: 64
+  spriteAtlas: {fileID: 100100200, guid: d8c428afee77ca64eb57ca2b5cc8f979, type: 3}
+  sprites:
+  - {fileID: -2413806693520163455, guid: 922a736d0c3e6574e98c2ce6b3efa63b, type: 3}
+  - {fileID: -6970190311976691341, guid: da271cb48211e3e4ba9db36987e3bc80, type: 3}
+  - {fileID: -1698433880977917403, guid: c261b22ff214fc048a01051af330c52f, type: 3}
+  - {fileID: -1749811785774762200, guid: ced8f55e57851c04eaf408483803d717, type: 3}
+  - {fileID: 7635545015552212381, guid: 47f2d09f039c43d49b82b47c11b69faa, type: 3}
+  ground:
+    serializedVersion: 2
+    m_Bits: 8
+  groundCheckPoint: {fileID: 4936217207963041638}
+  groundCheckRadius: 0.3
+  stickForce: 2
+  spindashSpeedIncrement: 5
+  spindashSpeedCap: 50
+  size: 1
+  cam: {fileID: 0}
+  spindashIncrement: 256
+  spindashCap: 1024
+  grounded: 0
+  startingLives: 3
+--- !u!82 &1211462263735378499
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5108587250507148524}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 0.29997897
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!58 &6740600185769602500
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -177,58 +299,7 @@ BoxCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
---- !u!114 &2756205709433946794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5108587250507148524}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5af431914368434bafa0259b8a33ca2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6709754504063300752
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5108587250507148524}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae6bbc1119054c74daa49f79ea833bee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 400
-  jumpForce: 40
-  spriteAtlas: {fileID: 100100200, guid: d8c428afee77ca64eb57ca2b5cc8f979, type: 3}
-  ground:
-    serializedVersion: 2
-    m_Bits: 8
-  groundCheckPoint: {fileID: 4936217207963041638}
-  groundCheckRadius: 0.1
-  stickForce: 1
-  spindashSpeedIncrement: 0
-  spindashSpeedCap: 0
-  size: 0.5
-  cam: {fileID: 0}
-  spindashIncrement: 0
-  spindashCap: 0
-  grounded: 0
-  startingLives: 3
+  m_Radius: 0.5
 --- !u!1 &5670943709776262257
 GameObject:
   m_ObjectHideFlags: 0
@@ -239,7 +310,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4936217207963041638}
   m_Layer: 2
-  m_Name: groundChecker
+  m_Name: groundCheckPt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -254,8 +325,8 @@ Transform:
   m_GameObject: {fileID: 5670943709776262257}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0}
-  m_LocalScale: {x: 1, y: 0.2, z: 1}
+  m_LocalPosition: {x: 0, y: -0.24, z: 0}
+  m_LocalScale: {x: 1, y: 0.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7859641738616614951}

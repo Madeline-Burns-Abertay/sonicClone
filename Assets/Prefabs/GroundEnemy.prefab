@@ -10,14 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 7859641738616614951}
   - component: {fileID: 599700844796803927}
-  - component: {fileID: 4904178987449988832}
   - component: {fileID: 2391304309191089704}
-  - component: {fileID: 571824407799339727}
   - component: {fileID: 1869709969071787654}
-  - component: {fileID: -865843802227682618}
+  - component: {fileID: 2732193170722802983}
   m_Layer: 0
-  m_Name: Enemy
-  m_TagString: Untagged
+  m_Name: GroundEnemy
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -92,42 +90,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &4904178987449988832
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5108587250507148524}
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 192
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
 --- !u!50 &2391304309191089704
 Rigidbody2D:
   serializedVersion: 5
@@ -155,28 +117,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!95 &571824407799339727
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5108587250507148524}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!61 &1869709969071787654
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -223,7 +163,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &-865843802227682618
+--- !u!114 &2732193170722802983
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -232,8 +172,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5108587250507148524}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c780fb6f9659c7544a6c2ddd41495ac1, type: 3}
+  m_Script: {fileID: 11500000, guid: 9565f4bf1d4d38943919629487ff21e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
-  cam: {fileID: 0}
+  viewPos: {x: 0, y: 0, z: 0}
+  pointValue: 100
+  debug: 1
+  spawnWasVisible: 0
+  speed: 0.1
