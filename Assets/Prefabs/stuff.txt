@@ -1,0 +1,39 @@
+sources locations
+
+-mls
+
+
+
+
+
+
+
+
+
+
+init 	-> 	enter	 ->	 top 	->	exit
+- all enabled	- fg enabled	 - bg enabled	- all enabled
+
+init	->	exit	 ->	 top	->	enter
+-all enabled	- bg enabled	 - fg enabled	- all enabled
+
+
+
+
+
+
+
+
+
+
+
+stop at random x pos on screen, fire, and keep going
+
+
+
+
+
+
+
+
+
