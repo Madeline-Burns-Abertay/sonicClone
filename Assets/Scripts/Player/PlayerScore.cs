@@ -31,7 +31,7 @@ public class PlayerScore : MonoBehaviour
 	public void resetScore() { score = 0; }
 	public void addScore(int points)
 	{
-		score = Mathf.Min(score + (points * 10), 9999990); // 7 digit score display, the last of which is always zero
+		score = Mathf.Min(score + (points), 9999990); // 7 digit score display, the last of which is always zero
 	}
 
 	// -------------------------------------
