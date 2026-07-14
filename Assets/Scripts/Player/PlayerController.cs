@@ -9,7 +9,7 @@ using UnityEngine.U2D;
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(PlayerScore))]
-public class PlayerController : MonoBehaviour // huh. last i heard the class name had to match the filename, but apparently this works
+public class PlayerController : MonoBehaviour
 {
 	[SerializeField] private float speed;
 	[SerializeField] private float jumpForce;
