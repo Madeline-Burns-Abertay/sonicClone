@@ -7,7 +7,7 @@ public class PlayerScore : MonoBehaviour
 	private int score, rings, time;
 	private bool outOfTime;
 
-	private const int timeLimitMins = 1; // y'know what? no. i'm not gonna let the time limit be anything but 10 mins
+	private const int timeLimitMins = 10; // y'know what? no. i'm not gonna let the time limit be anything but 10 mins
 	void Start()
 	{
 		score = rings = time = 0;
@@ -40,7 +40,7 @@ public class PlayerScore : MonoBehaviour
 	public bool isOutOfTime() { return outOfTime; }
 	private IEnumerator incrementTimer()
 	{
-		while (time < timeLimitMins * 60 - 1)
+		while (time < timeLimitMins * 60)
 		{
 			yield return new WaitForSeconds(1f);
 			time++;
