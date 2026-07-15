@@ -697,10 +697,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+    x: -0.10163112
+    y: -0.15696822
+    width: 1.204517
+    height: 1.3144255
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -1377,7 +1377,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: -107.51434, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1665,14 +1665,14 @@ MonoBehaviour:
     ScreenPosition: {x: 0, y: 0}
     DeadZone:
       Enabled: 1
-      Size: {x: 0.2, y: 0.2}
+      Size: {x: 0.2, y: 0.6}
     HardLimits:
       Enabled: 0
       Size: {x: 0.8, y: 0.8}
       Offset: {x: 0, y: 0}
   CenterOnActivate: 1
   TargetOffset: {x: 0, y: 0, z: 0}
-  Damping: {x: 1, y: 1, z: 1}
+  Damping: {x: 0, y: 0, z: 1}
   Lookahead:
     Enabled: 0
     Time: 0
@@ -2669,6 +2669,10 @@ PrefabInstance:
     - target: {fileID: 6709754504063300752, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
       propertyPath: sprites.Array.size
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6709754504063300752, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
+      propertyPath: deathJumpMultiplier
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6709754504063300752, guid: e4c71236629bebc49b7cea0db2eaf499, type: 3}
       propertyPath: 'sprites.Array.data[5]'

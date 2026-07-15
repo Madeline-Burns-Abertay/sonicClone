@@ -153,71 +153,70 @@ public class PlayerController : MonoBehaviour
 	}
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
-		if (collision.gameObject.CompareTag("Enemy"))
+		if (isPlaying())
 		{
-			if (canKillEnemies())
+			if (collision.gameObject.CompareTag("Enemy"))
 			{
-				//playSFX(6); // enemy pop sfx
-				Destroy(collision.gameObject);
+				if (!canKillEnemies())
+				{
+					hurt(false);
+				}
 			}
-			else
+			if (collision.gameObject.CompareTag("Hazard"))
 			{
-				hurt(false);
+				hurt(true);
 			}
-		}
-		if (collision.gameObject.CompareTag("Hazard"))
-		{
-			hurt(true);
 		}
 	}
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if (collision.CompareTag("Ring"))
+		if (isPlaying())
 		{
-
-			//playSFX((rings % 2 == 0 ? 3 : 8)); // ring pickup sfx, 3 in the right ear and 8 in the left
-			score.collectRing();
-			if (score.getRings() % 100 == 0 && lives < 99) // why lives < 99? because 2 digits for life display
+			if (collision.CompareTag("Ring"))
 			{
-				lives++;
+
+				//playSFX((rings % 2 == 0 ? 3 : 8)); // ring pickup sfx, 3 in the right ear and 8 in the left
+				score.collectRing();
+				if (score.getRings() % 100 == 0 && lives < 99) // why lives < 99? because 2 digits for life display
+				{
+					lives++;
+				}
+				Destroy(collision.gameObject);
 			}
-			Destroy(collision.gameObject);
-		}
 
-		if (collision.CompareTag("End Sign"))
-		{
-			StartCoroutine(EndLevel());
-		}
+			if (collision.CompareTag("End Sign"))
+			{
+				StartCoroutine(EndLevel());
+			}
 
-		if (collision.CompareTag("Projectile"))
-		{
-			hurt(false);
+			if (collision.CompareTag("Projectile"))
+			{
+				hurt(false);
+			}
 		}
 	}
 
 	private void hurt(bool fromSpikes)
 	{
 		//playSFX(fromSpikes ? spike : hurt)
-		State newState = (score.getRings() > 0 ? State.Hurt : State.Dead);
-		currentState = newState;
 		if (score.getRings() > 0) // don't kill the player if they have at least one ring
 		{
+			currentState = State.Hurt;
 			//playSFX(7); // ring loss sfx
 			rb.linearVelocity = Vector2.zero;
 			rb.AddForce(new Vector3(-Mathf.Sign(transform.localScale.x) * hurtKnockback, hurtKnockback), ForceMode2D.Impulse);
-			GameObject droppedRing;
-			Rigidbody2D ringRB;
 			Vector2 ringScatterForce;
 			for (int i = 0; i < score.getRings(); i++)
 			{
-				droppedRing = Instantiate(RingPrefab, transform);
+				GameObject droppedRing = Instantiate(RingPrefab, transform);
 				// scatter the dropped rings
-				ringRB = droppedRing.GetComponent<Rigidbody2D>();
+				Rigidbody2D ringRB = droppedRing.GetComponent<Rigidbody2D>();
 				ringScatterForce = Random.insideUnitCircle * ringScatterRange;
 				ringScatterForce = new Vector2(ringScatterForce.x, Mathf.Abs(ringScatterForce.y));
 				ringRB.AddForce(ringScatterForce, ForceMode2D.Impulse);
 				ringRB.gravityScale = rb.gravityScale;
+				Debug.Log($"dropped ring {i + 1}");
 			}
 			score.resetRings();
 		}
@@ -263,6 +262,7 @@ public class PlayerController : MonoBehaviour
 	{
 		if (currentState != State.Dead)
 		{
+			Debug.Log("dead");
 			currentState = State.Dead;
 			GetComponent<Collider2D>().enabled = false;
 			rb.linearVelocity = Vector2.zero;
@@ -286,6 +286,7 @@ public class PlayerController : MonoBehaviour
 	}
 
 	public bool canKillEnemies() {  return currentState == State.Spinning || currentState == State.Spindash; }
+	private bool isPlaying() { return currentState != State.Dead && currentState != State.FinishedLevel; }
 
 	private IEnumerator EndLevel()
 	{
