@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour
 			//jump
 			if (jump.WasPressedThisFrame())
 			{
-				if (currentState != State.Crouched)
+				if (currentState != State.Crouched && !isChargingSpindash)
 				{
 					rb.AddForce(jumpForce * transform.up, ForceMode2D.Impulse); // jump normally, taking floor angle into account
 					currentState = State.Spinning; // allow player to kill enemies
