@@ -15,11 +15,11 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private float jumpForce;
 	private Rigidbody2D rb;
 	private SpriteRenderer sprite;
-	[SerializeField] private SpriteAtlas spriteAtlas;
 	[SerializeField] private List<Sprite> sprites;
 	private InputAction move, crouch, jump;
 
 	// ground stuff
+	[SerializeField] private bool grounded = false, wasGrounded = false;
 	[SerializeField] private LayerMask ground;
 	[SerializeField] private Transform groundCheckPoint;
 	[SerializeField] private float groundCheckRadius;
@@ -51,7 +51,6 @@ public class PlayerController : MonoBehaviour
 
 	[SerializeField] private float spindashIncrement, spindashCap;
 
-	[SerializeField] private bool grounded = false;
 
 	private PlayerScore score;
 
@@ -136,12 +135,12 @@ public class PlayerController : MonoBehaviour
 				spindashCharge = 0f;
 				isChargingSpindash = false;
 			}
-			else currentState = State.Normal;
 		}
-		// is player still moving?
-		if (grounded && !crouch.inProgress && rb.linearVelocity.sqrMagnitude <= Consts.EPSILON)
+		
+		if (currentState == State.Spinning && ((grounded && !wasGrounded) || rb.linearVelocity.magnitude <= Consts.EPSILON))
 		{
-			currentState = State.Normal;
+			Debug.Log($"grounded: {grounded} wasGrounded: {wasGrounded} rb.linearVelocity.magnitude: {rb.linearVelocity.magnitude}");
+			currentState = (crouch.inProgress ? State.Crouched : State.Normal);
 		}
 
 		//rotate around ground
@@ -249,6 +248,7 @@ public class PlayerController : MonoBehaviour
 				break;
 		}
 		previousState = currentState;
+		wasGrounded = grounded;
 		//Debug.Log($"gravity scale {rb.gravityScale}\nforce acting {rb.totalForce}");
 	}
 
@@ -283,9 +283,9 @@ public class PlayerController : MonoBehaviour
 	public bool canKillEnemies() {  return currentState == State.Spinning || currentState == State.Spindash; }
 
 	private IEnumerator EndLevel()
-    {
-        Debug.Log("Reached End Sign");
-        currentState = State.FinishedLevel;
+	{
+		Debug.Log("Reached End Sign");
+		currentState = State.FinishedLevel;
 		yield return new WaitForSeconds(5f);
 		SceneManager.LoadScene("ThanksForPlaying"); // only one level - no point not hardcoding it yet
 	}
