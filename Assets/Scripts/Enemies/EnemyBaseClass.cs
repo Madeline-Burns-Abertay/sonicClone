@@ -77,9 +77,9 @@ public class Enemy : MonoBehaviour
 
 	protected bool isVisible(Vector3 pos)
 	{
-		viewPos = cam.WorldToViewportPoint(transform.position);
-		bool vertical = viewPos.y > -Consts.OFF_SCREEN_LOAD_DIST && viewPos.y < 1f + Consts.OFF_SCREEN_LOAD_DIST;
-		bool horizontal = viewPos.x > -Consts.OFF_SCREEN_LOAD_DIST && viewPos.x < 1f + Consts.OFF_SCREEN_LOAD_DIST;
+		viewPos = cam.WorldToViewportPoint(pos);
+		bool vertical   = -Consts.OFF_SCREEN_LOAD_DIST < viewPos.y && viewPos.y < 1f + Consts.OFF_SCREEN_LOAD_DIST;
+		bool horizontal = -Consts.OFF_SCREEN_LOAD_DIST < viewPos.x && viewPos.x < 1f + Consts.OFF_SCREEN_LOAD_DIST;
 		return vertical && horizontal;
 	}
 }
