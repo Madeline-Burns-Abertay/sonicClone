@@ -18,15 +18,19 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private SpriteAtlas spriteAtlas;
 	[SerializeField] private List<Sprite> sprites;
 	private InputAction move, crouch, jump;
+
+	// ground stuff
 	[SerializeField] private LayerMask ground;
 	[SerializeField] private Transform groundCheckPoint;
 	[SerializeField] private float groundCheckRadius;
 	[SerializeField] private float stickForce;
-	[SerializeField] private float spindashSpeedIncrement, spindashSpeedCap;
 	// [SerializeField] private float springLaunchVelocity;
 	[SerializeField, Range(0.5f, 2f)] private float size;
 
-	// stuff involving death
+	// stuff involving pain/death
+	[SerializeField] private float hurtKnockback, deathJumpMultiplier;
+	[SerializeField] private GameObject RingPrefab;
+	[SerializeField, Range(10f, 20f)] private float ringScatterRange;
 	[SerializeField] private Camera cam;
 	private System.Func<bool> fellOffTheScreen;
 
@@ -82,9 +86,9 @@ public class PlayerController : MonoBehaviour
 		//run up slopes
 		if (grounded && currentState != State.Dead) rb.gravityScale = 0f;
 		else rb.gravityScale = 1f;
-		
+
 		inputX = move.ReadValue<float>();
-		if (grounded && currentState != State.Spindash && crouch.inProgress) 
+		if (grounded && currentState != State.Spindash && crouch.inProgress)
 			currentState = rb.linearVelocity.magnitude < Consts.EPSILON ? State.Crouched : State.Spinning;
 		//movement with ground stick
 		switch (currentState)
@@ -98,8 +102,9 @@ public class PlayerController : MonoBehaviour
 				break;
 		}
 		// direction
-		if (Mathf.Abs(rb.linearVelocityX) > Consts.EPSILON && currentState != State.Hurt) 
+		if (Mathf.Abs(rb.linearVelocityX) > Consts.EPSILON && currentState != State.Hurt)
 			transform.localScale = new Vector3(Mathf.Sign(rb.linearVelocityX), 1) * size;
+		if (rb.linearVelocity.magnitude < Consts.EPSILON) rb.linearVelocity = Vector2.zero;
 	}
 	private void Update()
 	{
@@ -118,6 +123,7 @@ public class PlayerController : MonoBehaviour
 					isChargingSpindash = true; // charge spindash
 					spindashCharge = Mathf.Min(spindashCharge + spindashIncrement, spindashCap);
 					currentState = State.Spindash;
+
 				}
 			}
 		}
@@ -128,11 +134,12 @@ public class PlayerController : MonoBehaviour
 				currentState = State.Spinning;
 				rb.AddForce(Mathf.Sign(transform.localScale.x) * spindashCharge * transform.right);
 				spindashCharge = 0f;
+				isChargingSpindash = false;
 			}
 			else currentState = State.Normal;
 		}
-		// end pain once back on ground
-		if (grounded && currentState == State.Hurt)
+		// is player still moving?
+		if (grounded && !crouch.inProgress && rb.linearVelocity.sqrMagnitude <= Consts.EPSILON)
 		{
 			currentState = State.Normal;
 		}
@@ -145,10 +152,72 @@ public class PlayerController : MonoBehaviour
 		// time limit
 		if (score.isOutOfTime()) StartCoroutine(Die());
 	}
-	void OnTriggerEnter2D(Collider2D other)
+	private void OnCollisionEnter2D(Collision2D collision)
 	{
-		//triggers for springs, enemies, ring, etc
-		
+		if (collision.gameObject.CompareTag("Enemy"))
+		{
+			if (canKillEnemies())
+			{
+				//playSFX(6); // enemy pop sfx
+				Destroy(collision.gameObject);
+			}
+			else
+			{
+				hurt(false);
+			}
+		}
+		if (collision.gameObject.CompareTag("Hazard") || collision.gameObject.CompareTag("Projectile"))
+		{
+			hurt(collision.gameObject.CompareTag("Hazard"));
+		}
+	}
+
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		if (collision.CompareTag("Ring"))
+		{
+
+			//playSFX((rings % 2 == 0 ? 3 : 8)); // ring pickup sfx, 3 in the right ear and 8 in the left
+			score.collectRing();
+			if (score.getRings() % 100 == 0 && lives < 99) // why lives < 99? because 2 digits for life display
+			{
+				lives++;
+			}
+			Destroy(collision.gameObject);
+		}
+
+		if (collision.CompareTag("End Sign"))
+		{
+			StartCoroutine(EndLevel());
+		}
+	}
+
+	private void hurt(bool fromSpikes)
+	{
+		//playSFX(fromSpikes ? spike : hurt)
+		State newState = (score.getRings() > 0 ? State.Hurt : State.Dead);
+		currentState = newState;
+		if (score.getRings() > 0) // don't kill the player if they have at least one ring
+		{
+			//playSFX(7); // ring loss sfx
+			rb.linearVelocity = Vector2.zero;
+			rb.AddForce(new Vector3(-Mathf.Sign(transform.localScale.x) * hurtKnockback, hurtKnockback), ForceMode2D.Impulse);
+			GameObject droppedRing;
+			Rigidbody2D ringRB;
+			Vector2 ringScatterForce;
+			for (int i = 0; i < score.getRings(); i++)
+			{
+				droppedRing = Instantiate(RingPrefab, transform);
+				// scatter the dropped rings
+				ringRB = droppedRing.GetComponent<Rigidbody2D>();
+				ringScatterForce = Random.insideUnitCircle * ringScatterRange;
+				ringScatterForce = new Vector2(ringScatterForce.x, Mathf.Abs(ringScatterForce.y));
+				ringRB.AddForce(ringScatterForce, ForceMode2D.Impulse);
+				ringRB.gravityScale = rb.gravityScale;
+			}
+			score.resetRings();
+		}
+		else StartCoroutine(Die());
 	}
 
 	private void LateUpdate()
@@ -160,10 +229,10 @@ public class PlayerController : MonoBehaviour
 			case State.FinishedLevel:
 				sprite.sprite = sprites[0]; // normal
 				break;
-            case State.Spinning:
+			case State.Spinning:
 				sprite.sprite = sprites[5]; // should be the spinning sprite
 				break;
-            case State.Crouched:
+			case State.Crouched:
 				sprite.sprite = sprites[1]; // crouch
 				break;
 			case State.Spindash:
@@ -192,9 +261,9 @@ public class PlayerController : MonoBehaviour
 			currentState = State.Dead;
 			GetComponent<Collider2D>().enabled = false;
 			rb.linearVelocity = Vector2.zero;
-			rb.AddForce(jumpForce * Vector2.up);
-            //Debug.Log($"force acting {rb.totalForce}");
-            yield return new WaitUntil(fellOffTheScreen);
+			rb.AddForce(jumpForce * deathJumpMultiplier * Vector2.up);
+			//Debug.Log($"force acting {rb.totalForce}");
+			yield return new WaitUntil(fellOffTheScreen);
 			yield return new WaitForSeconds(1);
 			if (lives > 1)
 			{
@@ -212,4 +281,12 @@ public class PlayerController : MonoBehaviour
 	}
 
 	public bool canKillEnemies() {  return currentState == State.Spinning || currentState == State.Spindash; }
+
+	private IEnumerator EndLevel()
+    {
+        Debug.Log("Reached End Sign");
+        currentState = State.FinishedLevel;
+		yield return new WaitForSeconds(5f);
+		SceneManager.LoadScene("ThanksForPlaying"); // only one level - no point not hardcoding it yet
+	}
 }

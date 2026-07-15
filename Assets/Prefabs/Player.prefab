@@ -159,9 +159,11 @@ MonoBehaviour:
   groundCheckPoint: {fileID: 4936217207963041638}
   groundCheckRadius: 0.3
   stickForce: 2
-  spindashSpeedIncrement: 5
-  spindashSpeedCap: 50
   size: 1
+  hurtKnockback: 10
+  deathJumpMultiplier: 0
+  RingPrefab: {fileID: 8215159359977936061, guid: ac0a75e896ab0ef4c8a19afc53e09411, type: 3}
+  ringScatterRange: 10
   cam: {fileID: 0}
   spindashIncrement: 256
   spindashCap: 1024

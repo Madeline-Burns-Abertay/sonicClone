@@ -20,7 +20,7 @@ public class PlayerScore : MonoBehaviour
 	// -------------------------------------
 
 	public int getRings() { return rings; }
-	public void collectRing() { rings++; }
+	public void collectRing() { if (rings < 999) rings++; } // 3 digits for rings display - fine cuz no level in the originals ever has more than about 300 rings anyway
 	public void resetRings() { rings = 0; }
 
 	// -------------------------------------
