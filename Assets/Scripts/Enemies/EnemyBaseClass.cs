@@ -1,4 +1,3 @@
-using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -15,7 +14,7 @@ public class Enemy : MonoBehaviour
 	protected Rigidbody2D rb;
 	[SerializeField] protected int pointValue = 100;
 
-	[SerializeField] protected bool debug, spawnWasVisible;
+	[SerializeField] protected bool spawnWasVisible;
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	protected virtual void Start()
 	{
