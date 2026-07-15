@@ -165,9 +165,9 @@ public class PlayerController : MonoBehaviour
 				hurt(false);
 			}
 		}
-		if (collision.gameObject.CompareTag("Hazard") || collision.gameObject.CompareTag("Projectile"))
+		if (collision.gameObject.CompareTag("Hazard"))
 		{
-			hurt(collision.gameObject.CompareTag("Hazard"));
+			hurt(true);
 		}
 	}
 
@@ -188,6 +188,11 @@ public class PlayerController : MonoBehaviour
 		if (collision.CompareTag("End Sign"))
 		{
 			StartCoroutine(EndLevel());
+		}
+
+		if (collision.CompareTag("Projectile"))
+		{
+			hurt(false);
 		}
 	}
 
