@@ -104,6 +104,12 @@ public class PlayerController : MonoBehaviour
 		if (Mathf.Abs(rb.linearVelocityX) > Consts.EPSILON && currentState != State.Hurt)
 			transform.localScale = new Vector3(Mathf.Sign(rb.linearVelocityX), 1) * size;
 		if (rb.linearVelocity.magnitude < Consts.EPSILON) rb.linearVelocity = Vector2.zero;
+		// end pain
+		if (grounded && !wasGrounded && currentState == State.Hurt)
+		{
+			currentState = State.Normal;
+			rb.linearVelocity = Vector2.zero;
+		}
 	}
 	private void Update()
 	{
@@ -139,7 +145,6 @@ public class PlayerController : MonoBehaviour
 		
 		if (currentState == State.Spinning && ((grounded && !wasGrounded) || rb.linearVelocity.magnitude <= Consts.EPSILON))
 		{
-			Debug.Log($"grounded: {grounded} wasGrounded: {wasGrounded} rb.linearVelocity.magnitude: {rb.linearVelocity.magnitude}");
 			currentState = (crouch.inProgress ? State.Crouched : State.Normal);
 		}
 
