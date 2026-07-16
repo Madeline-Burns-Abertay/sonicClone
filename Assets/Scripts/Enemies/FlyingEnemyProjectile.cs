@@ -7,15 +7,18 @@ public class FlyingEnemyProjectile : MonoBehaviour
 	private Vector2 direction;
 	[SerializeField] private float speed;
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start()
+	private void Start()
 	{
 		player = GameObject.FindWithTag("Player");
 		direction = (player.transform.position - transform.position).normalized;
 	}
 
 	// Update is called once per frame
-	void Update()
+	private void Update()
 	{
 		transform.Translate(speed * Time.deltaTime * direction);
+		if (!isVisible()) Destroy(gameObject);
 	}
+
+
 }
