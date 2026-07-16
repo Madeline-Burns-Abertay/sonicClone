@@ -28,7 +28,8 @@ public class PlayerController : MonoBehaviour
 	[SerializeField, Range(0.5f, 2f)] private float size;
 
 	// stuff involving pain/death
-	[SerializeField] private float hurtKnockback, deathJumpMultiplier;
+	[SerializeField] private float hurtKnockback, deathJumpMultiplier, invincibilityDuration;
+	private float invincibilityTimer;
 	[SerializeField] private GameObject RingPrefab;
 	[SerializeField, Range(10f, 20f)] private float ringScatterRange;
 	[SerializeField] private Camera cam;
@@ -46,11 +47,10 @@ public class PlayerController : MonoBehaviour
 		FinishedLevel
 	}
 	private State currentState, previousState;
+	// spindash
 	private bool isChargingSpindash;
 	private float spindashCharge;
-
 	[SerializeField] private float spindashIncrement, spindashCap;
-
 
 	private PlayerScore score;
 
@@ -109,9 +109,23 @@ public class PlayerController : MonoBehaviour
 		{
 			currentState = State.Normal;
 			rb.linearVelocity = Vector2.zero;
+			StartCoroutine(InvincibilityFlicker());
 		}
 	}
-	private void Update()
+
+    private IEnumerator InvincibilityFlicker()
+    {
+		Debug.Log("started invincibility flicker");
+        while (invincibilityTimer > Consts.EPSILON)
+		{
+			sprite.enabled = !sprite.enabled;
+			yield return new WaitForEndOfFrame();
+			invincibilityTimer -= Time.deltaTime;
+		}
+		Debug.Log("ended invincibility flicker");
+    }
+
+    private void Update()
 	{
 		if (grounded)
 		{
@@ -158,7 +172,7 @@ public class PlayerController : MonoBehaviour
 	}
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
-		if (isPlaying())
+		if (isPlaying() || invincibilityTimer <= Consts.EPSILON)
 		{
 			if (collision.gameObject.CompareTag("Enemy"))
 			{
@@ -172,31 +186,29 @@ public class PlayerController : MonoBehaviour
 				hurt(true);
 			}
 		}
-	}
+        if (collision.gameObject.CompareTag("Ring") && isPlaying() && currentState != State.Hurt) // don't let the player collect rings they literally just dropped
+                                                                        // probably should've just done this from the beginning
+        {
+            //playSFX((rings % 2 == 0 ? 3 : 8)); // ring pickup sfx, 3 in the right ear and 8 in the left
+            score.collectRing();
+            if (score.getRings() % 100 == 0 && lives < 99) // why lives < 99? because 2 digits for life display
+            {
+                lives++;
+            }
+            Destroy(collision.gameObject);
+        }
+    }
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
 		if (isPlaying())
 		{
-			if (collision.CompareTag("Ring") && currentState != State.Hurt) // don't let the player collect rings they literally just dropped
-				// probably should've just done this from the beginning
-			{
-
-				//playSFX((rings % 2 == 0 ? 3 : 8)); // ring pickup sfx, 3 in the right ear and 8 in the left
-				score.collectRing();
-				if (score.getRings() % 100 == 0 && lives < 99) // why lives < 99? because 2 digits for life display
-				{
-					lives++;
-				}
-				Destroy(collision.gameObject);
-			}
-
 			if (collision.CompareTag("End Sign"))
 			{
 				StartCoroutine(EndLevel());
 			}
 
-			if (collision.CompareTag("Projectile"))
+			if (collision.CompareTag("Projectile") && invincibilityTimer <= Consts.EPSILON)
 			{
 				hurt(false);
 			}
