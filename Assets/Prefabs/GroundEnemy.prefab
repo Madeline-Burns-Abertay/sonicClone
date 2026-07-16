@@ -177,6 +177,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   viewPos: {x: 0, y: 0, z: 0}
   pointValue: 100
-  debug: 1
   spawnWasVisible: 0
-  speed: 0.1
+  speed: 0.01
