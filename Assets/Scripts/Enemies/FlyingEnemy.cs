@@ -7,7 +7,9 @@ public class FlyingEnemy : Enemy
 	[SerializeField, Range(-10f, 0f)] private float startingOffset;
 	[SerializeField, Range(0f, 0.5f), Tooltip("the range for where the enemy can stop to fire. note: viewport coords; symmetric")]
 		private float stopRange;
-	private float stopPoint; // where it WILL stop to fire
+	private float screenStopPoint;
+	[SerializeField] private float worldStopPoint; // where it WILL stop to fire
+	
 	private bool firing, fired;
 	[SerializeField, Range(1f, 5f)] private float stopDurationSeconds;
 	[SerializeField] private float speed;
@@ -23,7 +25,8 @@ public class FlyingEnemy : Enemy
 	protected override void init()
 	{
 		transform.position = new Vector2(cam.ViewportToWorldPoint(Vector3.zero).x, initialPos.y);
-		stopPoint = Random.Range(-stopRange, stopRange) + 0.5f; // need to add 0.5f so that 0 is in the middle of the screen
+		screenStopPoint = Random.Range(-stopRange, stopRange) + 0.5f; // need to add 0.5f so that the middle of the screen = the middle of the range
+		worldStopPoint = cam.ViewportToWorldPoint(new Vector3(screenStopPoint, 0)).x;
 		fired = false;
 	}
 
@@ -31,18 +34,8 @@ public class FlyingEnemy : Enemy
 	protected override void enemyBehaviour()
 	{
 		if (!firing) rb.linearVelocityX = speed;
-		if (!fired && cam.ViewportToWorldPoint(transform.position).x >= stopPoint) StartCoroutine(fire());
+		if (!fired && transform.position.x >= worldStopPoint) StartCoroutine(fire());
 		
-	}
-	private void OnDrawGizmos()
-	{
-		Gizmos.color = Color.red;
-		Gizmos.DrawWireCube(initialPos, new Vector3(stopRange, 0.4f));
-		if (!fired)
-		{
-			Gizmos.color = Color.green;
-			Gizmos.DrawWireSphere(new Vector3(stopPoint, initialPos.y), 0.1f);
-		}
 	}
 	private IEnumerator fire()
 	{
