@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -57,6 +58,18 @@ public class PlayerController : MonoBehaviour
 	private static int lives = 0;
 	[SerializeField] private int startingLives = 3;
 
+	private AudioSource sfxSource;
+	[SerializeField] private List<AudioClip> sfxList; // same order as sonic 2
+	private enum SFXNames // if only the inspector allowed me to have a dictionary in there... oh well. this will do for now
+	{
+		Jump,
+		Hurt,
+		SpindashRelease,
+		Spin,
+		RingLoss,
+		SpindashCharge
+	}
+
 	private void Start()
 	{
 		rb = GetComponent<Rigidbody2D>();
@@ -76,6 +89,7 @@ public class PlayerController : MonoBehaviour
 
 		fellOffTheScreen = () => cam.WorldToViewportPoint(transform.position + size * Vector3.up).y < 0;
 
+		sfxSource = GetComponent<AudioSource>();
 	}
 
 	private void FixedUpdate()
@@ -88,7 +102,14 @@ public class PlayerController : MonoBehaviour
 
 		inputX = move.ReadValue<float>();
 		if (grounded && currentState != State.Spindash && crouch.inProgress)
-			currentState = rb.linearVelocity.magnitude < Consts.EPSILON ? State.Crouched : State.Spinning;
+		{
+			if (rb.linearVelocity.magnitude >= Consts.EPSILON)
+			{
+				playSFX(SFXNames.Spin);
+				currentState = State.Spinning;
+			}
+			else currentState = State.Crouched;
+		}
 		//movement with ground stick
 		switch (currentState)
 		{
@@ -123,6 +144,7 @@ public class PlayerController : MonoBehaviour
 			yield return new WaitForEndOfFrame();
 			invincibilityTimer -= Time.deltaTime;
 		}
+		sprite.enabled = true;
 		Debug.Log("ended invincibility flicker");
 	}
 
@@ -137,13 +159,14 @@ public class PlayerController : MonoBehaviour
 				{
 					rb.AddForce(jumpForce * transform.up, ForceMode2D.Impulse); // jump normally, taking floor angle into account
 					currentState = State.Spinning; // allow player to kill enemies
+					playSFX(SFXNames.Jump);
 				}
 				else
 				{
 					isChargingSpindash = true; // charge spindash
 					spindashCharge = Mathf.Min(spindashCharge + spindashIncrement, spindashCap);
 					currentState = State.Spindash;
-
+					playSFX(SFXNames.SpindashCharge);
 				}
 			}
 		}
@@ -155,6 +178,7 @@ public class PlayerController : MonoBehaviour
 				rb.AddForce(Mathf.Sign(transform.localScale.x) * spindashCharge * transform.right);
 				spindashCharge = 0f;
 				isChargingSpindash = false;
+				playSFX(SFXNames.SpindashRelease);
 			}
 		}
 		
@@ -179,24 +203,21 @@ public class PlayerController : MonoBehaviour
 			{
 				if (!canKillEnemies())
 				{
-					hurt(false);
+					hurt();
 				}
 			}
 			if (collision.gameObject.CompareTag("Hazard"))
 			{
-				hurt(true);
+				hurt();
 			}
 		}
-		if (collision.gameObject.CompareTag("Ring") && isPlaying() && currentState != State.Hurt) // don't let the player collect rings they literally just dropped
-																		// probably should've just done this from the beginning
+		if (collision.gameObject.CompareTag("Ring") && isPlaying() && currentState != State.Hurt) // don't let the player collect rings they literally just dropped. probably should've just done this from the beginning
 		{
-			//playSFX((rings % 2 == 0 ? 3 : 8)); // ring pickup sfx, 3 in the right ear and 8 in the left
 			score.collectRing();
 			if (score.getRings() % 100 == 0 && lives < 99) // why lives < 99? because 2 digits for life display
 			{
 				lives++;
 			}
-			Destroy(collision.gameObject);
 		}
 	}
 
@@ -211,18 +232,17 @@ public class PlayerController : MonoBehaviour
 
 			if (collision.CompareTag("Projectile") && invincibilityTimer <= Consts.EPSILON)
 			{
-				hurt(false);
+				hurt();
 			}
 		}
 	}
 
-	private void hurt(bool fromSpikes)
+	private void hurt()
 	{
-		//playSFX(fromSpikes ? spike : hurt)
 		if (score.getRings() > 0) // don't kill the player if they have at least one ring
 		{
 			currentState = State.Hurt;
-			//playSFX(7); // ring loss sfx
+			playSFX(SFXNames.RingLoss);
 			rb.linearVelocity = Vector2.zero;
 			rb.AddForce(new Vector3(-Mathf.Sign(transform.localScale.x) * hurtKnockback, hurtKnockback), ForceMode2D.Impulse);
 			Vector2 ringScatterForce;
@@ -231,17 +251,22 @@ public class PlayerController : MonoBehaviour
 				GameObject droppedRing = Instantiate(RingPrefab, transform.position, Quaternion.identity);
 				// scatter the dropped rings
 				Rigidbody2D ringRB = droppedRing.GetComponent<Rigidbody2D>();
-				ringScatterForce = Random.insideUnitCircle * ringScatterRange;
+				ringScatterForce = UnityEngine.Random.insideUnitCircle * ringScatterRange;
 				ringScatterForce = new Vector2(ringScatterForce.x, Mathf.Abs(ringScatterForce.y));
 				ringRB.AddForce(ringScatterForce, ForceMode2D.Impulse);
 				ringRB.gravityScale = 1f;
-				Debug.Log($"dropped ring {i + 1}");
 			}
 			score.resetRings();
 		}
 		else StartCoroutine(Die());
 	}
 
+	private void playSFX(SFXNames name)
+	{
+		int index = Convert.ToInt32(name);
+		sfxSource.clip = sfxList[index];
+		sfxSource.Play();
+	}
 	private void LateUpdate()
 	{
 		// sprite state machine
@@ -272,13 +297,13 @@ public class PlayerController : MonoBehaviour
 		}
 		previousState = currentState;
 		wasGrounded = grounded;
-		//Debug.Log($"gravity scale {rb.gravityScale}\nforce acting {rb.totalForce}");
 	}
 
 	public int getLives() { return lives; }
 
 	private IEnumerator Die()
 	{
+		playSFX(SFXNames.Hurt);
 		if (currentState != State.Dead)
 		{
 			Debug.Log("dead");
@@ -286,7 +311,6 @@ public class PlayerController : MonoBehaviour
 			GetComponent<Collider2D>().enabled = false;
 			rb.linearVelocity = Vector2.zero;
 			rb.AddForce(jumpForce * deathJumpMultiplier * Vector2.up);
-			//Debug.Log($"force acting {rb.totalForce}");
 			yield return new WaitUntil(fellOffTheScreen);
 			yield return new WaitForSeconds(1);
 			if (lives > 1)

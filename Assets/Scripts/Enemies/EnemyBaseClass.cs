@@ -1,20 +1,23 @@
+using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
+[RequireComponent(typeof(Collider2D), typeof(Rigidbody2D), typeof(AudioSource))]
 public class Enemy : MonoBehaviour
 {
 	protected Camera cam;
-	protected bool active;
+	protected bool active, dead;
 
 	protected Vector3 initialPos;
-	[SerializeField] protected Vector3 viewPos;
+	protected Vector3 viewPos;
 	protected Collider2D hitbox;
 	protected SpriteRenderer spriteRenderer;
 	protected Rigidbody2D rb;
+	protected AudioSource sfxSource;
+    [SerializeField] private protected AudioClip destroySFX;
 	[SerializeField] protected int pointValue = 100;
 
-	[SerializeField] protected bool spawnWasVisible;
+	protected bool spawnWasVisible;
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	protected virtual void Start()
 	{
@@ -24,6 +27,9 @@ public class Enemy : MonoBehaviour
 		hitbox = GetComponent<Collider2D>();
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		rb = GetComponent<Rigidbody2D>();
+		sfxSource = GetComponent<AudioSource>();
+		sfxSource.clip = destroySFX;
+		Debug.Log($"{gameObject.name} destroy sfx: {destroySFX.name}");
 	}
 
 	protected virtual void init()
@@ -41,7 +47,7 @@ public class Enemy : MonoBehaviour
 		}
 		else
 		{
-			if (!spawnWasVisible)
+			if (!spawnWasVisible && !dead)
 			{
 				active = true;
 				init();
@@ -62,12 +68,21 @@ public class Enemy : MonoBehaviour
 		if (other.CompareTag("Player"))
 		{
 			if (other.GetComponent<PlayerController>().canKillEnemies())
-			{
-				Destroy(gameObject);
-				other.GetComponent<PlayerScore>().addScore(pointValue);
-			}
+            {
+                other.GetComponent<PlayerScore>().addScore(pointValue);				
+                StartCoroutine(Break());
+            }
 		}
 	}
+
+	private IEnumerator Break()
+    {
+        sfxSource.Play();
+		active = false;
+		dead = true;
+        yield return new WaitUntil(() => { return !sfxSource.isPlaying; });
+        Destroy(gameObject);
+    }
 
 	protected virtual void enemyBehaviour()
 	{

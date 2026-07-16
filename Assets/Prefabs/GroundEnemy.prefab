@@ -177,7 +177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewPos: {x: 0, y: 0, z: 0}
-  sfx: {fileID: 8300000, guid: 6ed83e82441888e43a64974272ed031c, type: 3}
+  destroySFX: {fileID: 8300000, guid: 6ed83e82441888e43a64974272ed031c, type: 3}
   pointValue: 100
   spawnWasVisible: 0
   speed: 0.01
