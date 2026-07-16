@@ -34,7 +34,7 @@ public class Enemy : MonoBehaviour
 	// Update is called once per frame
 	protected void Update()
 	{
-        if (!isVisible(transform.position))
+		if (!isVisible(transform.position))
 		{
 			active = false;
 			transform.position = initialPos;
@@ -51,10 +51,10 @@ public class Enemy : MonoBehaviour
 	}
 
 	protected void LateUpdate()
-    {
-        spriteRenderer.enabled = hitbox.enabled = active;
+	{
+		spriteRenderer.enabled = hitbox.enabled = active;
 		spawnWasVisible = isVisible(initialPos);
-    }
+	}
 
 	protected void OnCollisionEnter2D(Collision2D collision)
 	{

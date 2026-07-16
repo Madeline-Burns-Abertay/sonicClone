@@ -23,9 +23,9 @@ public class FlyingEnemyProjectile : MonoBehaviour
 
 	private bool isVisible()
 	{
-        viewPos = Camera.main.WorldToViewportPoint(transform.position);
-        bool vertical = -Consts.OFF_SCREEN_LOAD_DIST < viewPos.y && viewPos.y < 1f + Consts.OFF_SCREEN_LOAD_DIST;
-        bool horizontal = -Consts.OFF_SCREEN_LOAD_DIST < viewPos.x && viewPos.x < 1f + Consts.OFF_SCREEN_LOAD_DIST;
-        return vertical && horizontal;
-    }
+		viewPos = Camera.main.WorldToViewportPoint(transform.position);
+		bool vertical = -Consts.OFF_SCREEN_LOAD_DIST < viewPos.y && viewPos.y < 1f + Consts.OFF_SCREEN_LOAD_DIST;
+		bool horizontal = -Consts.OFF_SCREEN_LOAD_DIST < viewPos.x && viewPos.x < 1f + Consts.OFF_SCREEN_LOAD_DIST;
+		return vertical && horizontal;
+	}
 }

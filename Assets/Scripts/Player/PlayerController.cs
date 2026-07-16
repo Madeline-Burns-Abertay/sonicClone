@@ -113,19 +113,20 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-    private IEnumerator InvincibilityFlicker()
-    {
+	private IEnumerator InvincibilityFlicker()
+	{
+		invincibilityTimer = invincibilityDuration;
 		Debug.Log("started invincibility flicker");
-        while (invincibilityTimer > Consts.EPSILON)
+		while (invincibilityTimer > Consts.EPSILON)
 		{
 			sprite.enabled = !sprite.enabled;
 			yield return new WaitForEndOfFrame();
 			invincibilityTimer -= Time.deltaTime;
 		}
 		Debug.Log("ended invincibility flicker");
-    }
+	}
 
-    private void Update()
+	private void Update()
 	{
 		if (grounded)
 		{
@@ -186,18 +187,18 @@ public class PlayerController : MonoBehaviour
 				hurt(true);
 			}
 		}
-        if (collision.gameObject.CompareTag("Ring") && isPlaying() && currentState != State.Hurt) // don't let the player collect rings they literally just dropped
-                                                                        // probably should've just done this from the beginning
-        {
-            //playSFX((rings % 2 == 0 ? 3 : 8)); // ring pickup sfx, 3 in the right ear and 8 in the left
-            score.collectRing();
-            if (score.getRings() % 100 == 0 && lives < 99) // why lives < 99? because 2 digits for life display
-            {
-                lives++;
-            }
-            Destroy(collision.gameObject);
-        }
-    }
+		if (collision.gameObject.CompareTag("Ring") && isPlaying() && currentState != State.Hurt) // don't let the player collect rings they literally just dropped
+																		// probably should've just done this from the beginning
+		{
+			//playSFX((rings % 2 == 0 ? 3 : 8)); // ring pickup sfx, 3 in the right ear and 8 in the left
+			score.collectRing();
+			if (score.getRings() % 100 == 0 && lives < 99) // why lives < 99? because 2 digits for life display
+			{
+				lives++;
+			}
+			Destroy(collision.gameObject);
+		}
+	}
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{

@@ -34,11 +34,17 @@ public class FlyingEnemy : Enemy
 		if (!fired && cam.ViewportToWorldPoint(transform.position).x >= stopPoint) StartCoroutine(fire());
 		
 	}
-    private void OnDrawGizmos()
-    {
-        
-    }
-    private IEnumerator fire()
+	private void OnDrawGizmos()
+	{
+		Gizmos.color = Color.red;
+		Gizmos.DrawWireCube(initialPos, new Vector3(stopRange, 0.4f));
+		if (!fired)
+		{
+			Gizmos.color = Color.green;
+			Gizmos.DrawWireSphere(new Vector3(stopPoint, initialPos.y), 0.1f);
+		}
+	}
+	private IEnumerator fire()
 	{
 		Debug.Log("firing");
 		firing = true;

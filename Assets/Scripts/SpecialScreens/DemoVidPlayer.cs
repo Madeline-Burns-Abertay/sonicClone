@@ -8,28 +8,28 @@ using UnityEngine.Video;
 
 public class DemoVidPlayer : MonoBehaviour
 {
-    VideoPlayer player;
-    [SerializeField] List<VideoClip> demos;
-    [SerializeField] float demoLength = 30f;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        player = GetComponent<VideoPlayer>();
-        VideoClip demo = demos[Random.Range(0, demos.Count)];
-        player.clip = demo;
-        player.Play();
-        StartCoroutine(backToTitle(demoLength));
-    }
+	VideoPlayer player;
+	[SerializeField] List<VideoClip> demos;
+	[SerializeField] float demoLength = 30f;
+	// Start is called once before the first execution of Update after the MonoBehaviour is created
+	void Start()
+	{
+		player = GetComponent<VideoPlayer>();
+		VideoClip demo = demos[Random.Range(0, demos.Count)];
+		player.clip = demo;
+		player.Play();
+		StartCoroutine(backToTitle(demoLength));
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	// Update is called once per frame
+	void Update()
+	{
+		
+	}
 
-    IEnumerator backToTitle(float length)
-    {
-        yield return new WaitForSeconds(length);
-        SceneManager.LoadScene("TitleScreen");
-    }
+	IEnumerator backToTitle(float length)
+	{
+		yield return new WaitForSeconds(length);
+		SceneManager.LoadScene("TitleScreen");
+	}
 }
