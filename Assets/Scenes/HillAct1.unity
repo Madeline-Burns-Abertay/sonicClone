@@ -697,8 +697,8 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: -0.30112925
-    y: -0.30513448
+    x: -0.10163112
+    y: -0.15696822
     width: 1.204517
     height: 1.3144255
   near clip plane: 0.3
@@ -730,7 +730,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.2761004, y: -1.22556, z: -10}
+  m_LocalPosition: {x: -2.5570147, y: -1.22556, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2251,6 +2251,10 @@ PrefabInstance:
       propertyPath: stopRange
       value: 0.23
       objectReference: {fileID: 0}
+    - target: {fileID: 7133804430590791299, guid: 2c8de92b052918f47a09d43d9c18b899, type: 3}
+      propertyPath: destroySFX
+      value: 
+      objectReference: {fileID: 8300000, guid: 6ed83e82441888e43a64974272ed031c, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
