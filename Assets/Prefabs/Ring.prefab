@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2211487077513492624}
   - component: {fileID: 4640836974110414565}
   - component: {fileID: 7574807513302689919}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Ring
   m_TagString: Ring
   m_Icon: {fileID: 0}
@@ -99,13 +99,13 @@ CircleCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: e14e8002db4168944b5416097f83db58, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 136
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -119,7 +119,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
