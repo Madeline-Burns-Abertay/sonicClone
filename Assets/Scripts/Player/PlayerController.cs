@@ -178,7 +178,8 @@ public class PlayerController : MonoBehaviour
 	{
 		if (isPlaying())
 		{
-			if (collision.CompareTag("Ring"))
+			if (collision.CompareTag("Ring") && currentState != State.Hurt) // don't let the player collect rings they literally just dropped
+				// probably should've just done this from the beginning
 			{
 
 				//playSFX((rings % 2 == 0 ? 3 : 8)); // ring pickup sfx, 3 in the right ear and 8 in the left
@@ -214,13 +215,13 @@ public class PlayerController : MonoBehaviour
 			Vector2 ringScatterForce;
 			for (int i = 0; i < score.getRings(); i++)
 			{
-				GameObject droppedRing = Instantiate(RingPrefab, transform);
+				GameObject droppedRing = Instantiate(RingPrefab, transform.position, Quaternion.identity);
 				// scatter the dropped rings
 				Rigidbody2D ringRB = droppedRing.GetComponent<Rigidbody2D>();
 				ringScatterForce = Random.insideUnitCircle * ringScatterRange;
 				ringScatterForce = new Vector2(ringScatterForce.x, Mathf.Abs(ringScatterForce.y));
 				ringRB.AddForce(ringScatterForce, ForceMode2D.Impulse);
-				ringRB.gravityScale = rb.gravityScale;
+				ringRB.gravityScale = 1f;
 				Debug.Log($"dropped ring {i + 1}");
 			}
 			score.resetRings();
