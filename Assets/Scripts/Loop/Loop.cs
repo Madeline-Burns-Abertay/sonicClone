@@ -8,7 +8,7 @@ public class Loop : MonoBehaviour
 	[SerializeField] private GameObject enterTrigger, topTrigger, exitTrigger;
 	private LoopTriggerHandler entryHandler, topHandler, exitHandler;
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start()
+	private void Start()
 	{
 		foregroundHitbox = foregroundHalf.GetComponent<Collider2D>();
 		backgroundHitbox = backgroundHalf.GetComponent<Collider2D>();
@@ -19,7 +19,7 @@ public class Loop : MonoBehaviour
 	}
 
 	// Update is called once per frame
-	void Update()
+	private void Update()
 	{
 		bool enter = entryHandler.getTriggerState(), exit = exitHandler.getTriggerState(), top = topHandler.getTriggerState();
 		if (enter)

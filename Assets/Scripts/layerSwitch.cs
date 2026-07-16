@@ -5,7 +5,7 @@ public class layerSwitch : MonoBehaviour
 {
 	[SerializeField] private bool sendToBG;
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start()
+	private void Start()
 	{
 		
 	}

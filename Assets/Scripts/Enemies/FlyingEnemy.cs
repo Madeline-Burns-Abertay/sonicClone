@@ -34,8 +34,11 @@ public class FlyingEnemy : Enemy
 		if (!fired && cam.ViewportToWorldPoint(transform.position).x >= stopPoint) StartCoroutine(fire());
 		
 	}
-
-	private IEnumerator fire()
+    private void OnDrawGizmos()
+    {
+        
+    }
+    private IEnumerator fire()
 	{
 		Debug.Log("firing");
 		firing = true;

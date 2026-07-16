@@ -8,7 +8,7 @@ public class PlayerScore : MonoBehaviour
 	private bool outOfTime;
 
 	private const int timeLimitMins = 10; // y'know what? no. i'm not gonna let the time limit be anything but 10 mins
-	void Start()
+	private void Start()
 	{
 		score = rings = time = 0;
 		outOfTime = false;

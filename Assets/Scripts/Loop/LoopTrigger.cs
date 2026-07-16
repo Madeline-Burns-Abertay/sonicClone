@@ -5,7 +5,7 @@ public class LoopTriggerHandler : MonoBehaviour
 {
 	private bool triggered;
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start() { resetTriggerState(); }
+	private void Start() { resetTriggerState(); }
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{

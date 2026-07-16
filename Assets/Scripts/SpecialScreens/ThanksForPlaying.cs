@@ -11,14 +11,14 @@ public class ThanksForPlaying : MonoBehaviour
 	[SerializeField] TMP_Text optionText;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start()
+	private void Start()
 	{
 		navigate = InputSystem.actions.FindAction("Navigate");
 		submit = InputSystem.actions.FindAction("Submit");
 	}
 
 	// Update is called once per frame
-	void Update()
+	private void Update()
 	{
 		Vector2 input = navigate.ReadValue<Vector2>();
 		bool changeOptions = input.y != 0 && input != previousInput;
